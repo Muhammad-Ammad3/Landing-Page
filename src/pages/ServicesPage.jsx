@@ -1,34 +1,53 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  FaGaugeHigh, 
+  FaShield, 
+} from 'react-icons/fa6'; // Yeh icons fa6 mein hain
+
+import { FaCheckCircle } from 'react-icons/fa';
 
 const servicesDetail = [
-  { title: 'Lightning Fast', icon: 'gauge-high', desc: 'Our infrastructure is built for speed...', fullInfo: 'We use edge computing and global load balancing to ensure your app delivers content in milliseconds.' },
-  { title: 'Enterprise Security', icon: 'shield', desc: 'Top-tier security for your data.', fullInfo: 'We provide SOC2 compliance, encrypted databases, and DDoS protection by default.' },
-  // Aap baki services yahan add kar sakte hain
+  { id: 1, title: 'Lightning Fast Performance', icon: FaGaugeHigh, desc: 'Experience blazing fast load times', fullInfo: 'We use edge computing and CDN integration to ensure content delivery in milliseconds.', benefits: ['50ms response', 'Global CDN', 'Auto-scaling'], color: 'text-blue-500' },
+  { id: 2, title: 'Enterprise Security', icon: FaShield, desc: 'Bank-grade security', fullInfo: 'We provide SOC2 compliance and end-to-end encryption to keep your data safe.', benefits: ['256-bit encryption', 'DDoS protection', 'Backups'], color: 'text-indigo-500' },
+  // ... baaki items aap isi format mein rakhein
 ];
 
 const ServicesPage = () => {
-  return (
-    <div className="pt-24 pb-20 bg-slate-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-6">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-16">
-          <h1 className="text-5xl font-extrabold text-slate-900 mb-6">Our Services</h1>
-          <p className="text-xl text-slate-600">Everything you need to build, deploy, and scale.</p>
-        </motion.div>
+  const [expandedCard, setExpandedCard] = useState(null);
 
-        <div className="grid gap-12">
-          {servicesDetail.map((service, index) => (
-            <div key={index} className="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-slate-100 flex flex-col md:flex-row gap-8">
-              <div className="w-20 h-20 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center text-3xl shrink-0">
-                <FontAwesomeIcon icon={service.icon} />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">{service.title}</h3>
-                <p className="text-slate-600 text-lg mb-4">{service.desc}</p>
-                <p className="text-slate-500">{service.fullInfo}</p>
-              </div>
-            </div>
+  return (
+    <div className="bg-slate-50 min-h-screen py-20 px-6">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-5xl font-extrabold text-center mb-16 text-slate-900">Our Services</h1>
+        
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {servicesDetail.map((service) => (
+            <motion.div
+              key={service.id}
+              layout
+              className="bg-white p-6 rounded-2xl shadow-md cursor-pointer hover:shadow-xl transition-all"
+              onClick={() => setExpandedCard(expandedCard === service.id ? null : service.id)}
+            >
+              <service.icon className={`text-4xl mb-4 ${service.color}`} />
+              <h3 className="text-xl font-bold">{service.title}</h3>
+              <p className="text-indigo-600 font-medium mb-4">{service.desc}</p>
+
+              <AnimatePresence>
+                {expandedCard === service.id && (
+                  <motion.div 
+                    initial={{ height: 0, opacity: 0 }} 
+                    animate={{ height: 'auto', opacity: 1 }} 
+                    exit={{ height: 0, opacity: 0 }}
+                  >
+                    <p className="text-slate-600 mb-4">{service.fullInfo}</p>
+                    {service.benefits.map((b, i) => (
+                      <div key={i} className="flex items-center gap-2 text-sm text-slate-500"><FaCheckCircle className="text-green-500" /> {b}</div>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           ))}
         </div>
       </div>
