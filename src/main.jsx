@@ -1,11 +1,10 @@
-// main.jsx
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import "./index.css";
 
-// Font Awesome Configuration
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   fab,
@@ -60,9 +59,8 @@ import {
   faChartSimple,
 } from "@fortawesome/free-solid-svg-icons";
 
-// Add all icons to library
+
 library.add(
-  // Brand Icons
   fab,
   faGithub,
   faTwitter,
